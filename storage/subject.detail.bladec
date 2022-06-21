@@ -1,0 +1,30 @@
+<?php $_shouldextend[1]=1; ?>
+<?php $this->startSection('title', 'chi tiết môn học'); ?>    
+<?php $this->startSection('content'); ?>
+<table class="table table-hover">
+ <thead>
+ <th>ID</th>
+ <th>Tên môn học</th>
+ <th>Số bài quiz</th>
+ <th>
+ <a href="">Tạo mới</a>
+ </th>
+ <tbody>    
+ <tr>
+ <td>con cac</td>
+ <td>hay</td>             
+ <td>
+ <a href="">Sửa</a>
+ <a href="">Xóa</a>
+ </td>
+ </tr>
+ 
+ </tbody>
+ </thead>
+</table>
+<?php $this->stopSection(); ?>
+<?php $this->startSection('page-script'); ?>
+<script></script>
+<?php $this->stopSection(); ?>
+
+<?php if (isset($_shouldextend[1])) { echo $this->runChild('layouts.main'); } ?>

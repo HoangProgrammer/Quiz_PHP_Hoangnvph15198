@@ -1,0 +1,24 @@
+<?php $_shouldextend[1]=1; ?>
+<?php $this->startSection('title', 'trang chủ FPT-POLY'); ?>    
+<?php $this->startSection('content'); ?>
+
+<h3 style="margin-top:30px ; margin-left: 10px;" class="justify-content-start text-secondary">CHUYÊN MỤC</h3>
+<div class="list-group list-group-flush border-bottom scrollarea">
+ <?php $__currentLoopData = $data; $this->addLoop($__currentLoopData);$this->getFirstLoop();
+ foreach($__currentLoopData as $value): $loop = $this->incrementLoopIndices();  ?>
+ <a href="<?php echo \htmlentities(URL, ENT_QUOTES, 'UTF-8', false); ?>chu-de/chi-tiet-chu-de/<?php echo \htmlentities($value->id, ENT_QUOTES, 'UTF-8', false); ?>" class="list-group-item list-group-item-action  py-3 lh-tight" aria-current="true">
+ <div class=" d-flex w-100 align-items-center justify-content-start">
+ <i class="font_i text-dark fas fa-folder-open"></i>
+ <strong class="mb-1"><?php echo \htmlentities($value->name, ENT_QUOTES, 'UTF-8', false); ?></strong> 
+ </div>
+ <!-- <div class="col-10 mb-1 small">Some placeholder content in a paragraph below the heading and date.</div> -->
+ </a>
+ 
+ <?php endforeach; $this->popLoop(); $loop = $this->getFirstLoop(); ?>
+ </div>
+
+ <?php $this->stopSection(); ?>
+<?php $this->startSection('page-script'); ?>
+<script></script>
+<?php $this->stopSection(); ?>
+<?php if (isset($_shouldextend[1])) { echo $this->runChild('layouts.homepage'); } ?>

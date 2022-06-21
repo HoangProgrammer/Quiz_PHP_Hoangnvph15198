@@ -1,0 +1,32 @@
+@extends('layouts.main')
+@section('title', 'Thêm Quiz')    
+@section('content')
+
+<a title="quay lại" href="<?=URL?>mon-hoc/chi-tiet/<?=$_GET['id']?>" class="btn btn-dark"><i class="fas fa-arrow-left"></i></a>
+
+<form action="<?=URL?>mon-hoc/quizs/luu-tao-moi" method="post">
+  <div class="mb-3">
+    <label for="exampleInputEmail1" class="form-label">Tên Quiz</label>
+    <input type="text" name="name" class="form-control" >
+  </div>
+  <div class="mb-3" >
+    <label for="exampleInputPassword1" class="form-label">Thời Gian Bắt Đầu</label>
+    <input type="datetime-local" name="start_time"  class="form-control" id="date1" >
+  </div>
+  <div class="mb-3">
+    <label for="exampleInputPassword1" class="form-label">Thời Gian kết thúc</label>
+    <input type="datetime-local" name="end_time"  class="form-control">
+  </div>
+  <div class="mb-3">
+    <label for="exampleInputPassword1" class="form-label">Thời lượng phút</label>
+    <input type="text" name="minutes"  class="form-control">
+    <input type="hidden" name="subject_id" value="<?=$_GET['id']?>"  class="form-control">
+  </div>
+  <?=$msg=(isset( $_SESSION['error']))?"<div class='alert alert-danger'>". $_SESSION['error']." </div>":"";
+   unset( $_SESSION['error'])   ?>
+  <button type="submit" class="btn btn-primary">Thêm</button>
+</form>
+@endsection
+@section('page-script')
+<script></script>
+@endsection

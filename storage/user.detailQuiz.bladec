@@ -1,0 +1,87 @@
+<?php $_shouldextend[1]=1; ?>
+<?php $this->startSection('title', 'Chi Tiết Quiz'); ?>    
+<?php $this->startSection('content'); ?>
+
+<div class="container-fluid">
+	<a href="homepage"><?php echo \htmlentities($subject->name, ENT_QUOTES, 'UTF-8', false); ?></a> >> <a href="xem-chu-de?id=<?php echo \htmlentities($_GET['id_subject'], ENT_QUOTES, 'UTF-8', false); ?>">Quizs</a> >> <a href="" class="text-primary"><?php echo \htmlentities($quiz->name, ENT_QUOTES, 'UTF-8', false); ?></a>
+</div>
+<br>
+<br>
+
+<?php 
+$star_Time = (!empty($quizStudent->start_time)) ? $quizStudent->start_time : '';
+$startTime = $star_Time;
+$times = $quiz->minutes . " minute";
+$format = strtotime($startTime . '+' . $times);
+$endTime = date("Y-m-d H:i:s", $format);
+
+$duration = strtotime($endTime) - time();
+$startDate = strtotime($quiz->start_time);
+$endDate =  strtotime($quiz->end_time);
+
+$durationTime = $endDate - strtotime(date('Y-m-d H:i:s'));
+
+ ?>
+<?php /* <?php echo \htmlentities($durationTime, ENT_QUOTES, 'UTF-8', false); ?> */ ?>
+
+<?php if($user->role_id==1): ?>
+<div class="container-fluid d-flex justify-content-end">
+	<div class="dropdown">
+ <a class="btn btn-primary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+ Thao Tác
+ </a>
+ <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+ <li><a class="dropdown-item" href="<?php echo \htmlentities(URL, ENT_QUOTES, 'UTF-8', false); ?>chu-de/thiet-lap/<?php echo \htmlentities($_GET['id'], ENT_QUOTES, 'UTF-8', false); ?>/sub/<?php echo \htmlentities($_GET['id_subject'], ENT_QUOTES, 'UTF-8', false); ?>/author/<?php echo \htmlentities($_SESSION['user'], ENT_QUOTES, 'UTF-8', false); ?>">Thiết Lập</a></li>
+ </ul>
+	</div>
+</div>
+<?php endif; ?> 
+
+<br>
+<br>
+<div class="container-fluid">
+	<form action="<?php echo \htmlentities(URL, ENT_QUOTES, 'UTF-8', false); ?>chu-de/chi-tiet-chu-de/chi-tiet-quiz/lam-quiz/<?php echo \htmlentities($quiz->id, ENT_QUOTES, 'UTF-8', false); ?>/sub/<?php echo \htmlentities($_GET['id_subject'], ENT_QUOTES, 'UTF-8', false); ?>" method="post">
+
+ <input type="hidden" name="start_time" value="<?php echo \htmlentities(date('Y-m-d H:i:s'), ENT_QUOTES, 'UTF-8', false); ?>" />
+ 
+
+ <?php  $end=(!empty($quizStudent->end_time)) ? strtotime( $quizStudent->end_time):''  ?>
+<?php /* <?php echo \htmlentities($end, ENT_QUOTES, 'UTF-8', false); ?> */ ?>
+ <?php if($quiz->status != 0 || $durationTime < 1 ): ?>
+ <div class="alert alert-secondary">bài kiểm tra  đã kết thúc <?php echo \htmlentities($quiz->end_time, ENT_QUOTES, 'UTF-8', false); ?></div>
+ <?php elseif(!empty($quizStudent->student_id) && $quizStudent->student_id===$_SESSION['user']): ?> 
+ <a class="btn btn-primary " href="<?php echo \htmlentities(URL, ENT_QUOTES, 'UTF-8', false); ?>chu-de/xem-ket-qua/<?php echo \htmlentities($_GET['id'], ENT_QUOTES, 'UTF-8', false); ?>/sub/<?php echo \htmlentities($_GET['id_subject'], ENT_QUOTES, 'UTF-8', false); ?>"> xem kết quả</a>
+ <?php /* <?php endif; ?> */ ?>
+ <?php else: ?>
+ <button class="btn btn-success col-lg-12"> Bắt đầu làm bài</button>
+
+ <?php endif; ?>
+
+ 
+ 
+	</form>
+
+
+	<br>
+	<br>
+	<div class="ilInfoScreenSec form-horizontal" id="infoscreen_section_2">
+ <h3 class="ilHeader">Thuộc tính chung</h3>
+
+ <div class="form-group">
+ <span class="form-group">Tác Giả :</span> <span>hoang</span>
+ </div>
+
+ <div class="form-group">
+ <span class="form-group">Tiêu đề :</span> <span>quiz</span>
+ </div>
+
+
+	</div>
+</div>
+
+
+<?php $this->stopSection(); ?>
+<?php $this->startSection('page-script'); ?>
+<script></script>
+<?php $this->stopSection(); ?>
+<?php if (isset($_shouldextend[1])) { echo $this->runChild('layouts.homepage'); } ?>
