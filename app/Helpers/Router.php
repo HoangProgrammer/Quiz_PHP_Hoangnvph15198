@@ -145,7 +145,7 @@ class Router
         $route->get("xem-ket-qua/{id_quiz}/sub/{id_sub}", [QuizController::class, 'examResults']);
         $route->get("chi-tiet-ket-qua/{id_quiz}", [QuizController::class, 'detailResult']);
         $route->post("lay-du-lieu", [QuizController::class, 'dataResult']);
-        $route->get("thiet-lap/{id_quiz}/sub/{id_sub}/author/{id_user}", [QuizController::class, 'update']);
+        $route->get("thiet-lap/{id_quiz}/sub/{id_sub}/author/{id_user}", [QuizController::class, 'SettingQuiz']);
         $route->post("luu-thiet-lap/{id_quiz}/subject/{id_sub}", [QuizController::class, 'updateSetting']);
       });
 

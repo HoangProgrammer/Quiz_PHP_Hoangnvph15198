@@ -40,19 +40,19 @@ class QuizController extends BaseController
 
     public function update($id_quiz, $id_sub)
     {
-        // var_dump($_GET['user']);die;
-        $_GET['id_subject']= $id_sub;
-        $_GET['id_quiz']= $id_quiz;     
-            $model = Quiz::where('id', "=", $id_quiz)->first();
-            $_GET['id_sub'] = $id_sub;
-            return view(
-                'admin.updateQuiz',
-                [
-                    "model" => $model,
-                   
-                ]
-            );
-        
+        // var_dump($id_user);die;
+
+        $_GET['id_subject'] = $id_sub;
+        $_GET['id_quiz'] = $id_quiz;
+        $model = Quiz::where('id', "=", $id_quiz)->first();
+        $_GET['id_sub'] = $id_sub;
+        return view(
+            'admin.updateQuiz',
+            [
+                "model" => $model,
+
+            ]
+        );
     }
 
 
@@ -63,23 +63,23 @@ class QuizController extends BaseController
             $_SESSION['error'] = " không được để trống các trường ";
             $this->header('mon-hoc/quizs/cap-nhat/' . $id . '/sub/' . $id_sub);
         } else {
-        if(empty($_POST['start_time'])||empty($_POST['end_time'])){
-            Quiz::find($id)->update([
-                'name'=> $_POST['name'],
-                'start_time'=> $_POST['startDefault'],
-                'end_time'=> $_POST['startDefault'],
-                'minutes'=> $_POST['minutes'],
-                'status'=> $_POST['status'],
-            ]);
-        }else{
-            Quiz::find($id)->update([
-                'name'=> $_POST['name'],
-                'start_time'=> $_POST['start_time'],
-                'end_time'=> $_POST['end_time'],
-                'minutes'=> $_POST['minutes'],
-                'status'=> $_POST['status'],
-            ]);
-        }
+            if (empty($_POST['start_time']) || empty($_POST['end_time'])) {
+                Quiz::find($id)->update([
+                    'name' => $_POST['name'],
+                    'start_time' => $_POST['startDefault'],
+                    'end_time' => $_POST['startDefault'],
+                    'minutes' => $_POST['minutes'],
+                    'status' => $_POST['status'],
+                ]);
+            } else {
+                Quiz::find($id)->update([
+                    'name' => $_POST['name'],
+                    'start_time' => $_POST['start_time'],
+                    'end_time' => $_POST['end_time'],
+                    'minutes' => $_POST['minutes'],
+                    'status' => $_POST['status'],
+                ]);
+            }
             $this->header('mon-hoc/chi-tiet/' . $id_sub);
         }
     }
@@ -137,8 +137,8 @@ class QuizController extends BaseController
         $_GET['id_subject'] = $id_sub;
         $model = Quiz::where('id', '=', $_GET['id'])->first();
         $quizStudent = StudentQuiz::where('quiz_id', '=', $_GET['id'])
-                                ->where('student_id', '=', $_SESSION['user'])
-                                ->first();
+            ->where('student_id', '=', $_SESSION['user'])
+            ->first();
         $user = User::where('id', '=', $_SESSION['user'])->first();
         $subject = Subject::where('id', '=', $_GET['id_subject'])->first();
 
@@ -173,13 +173,12 @@ class QuizController extends BaseController
 
             if ($checkStudent == false) {
 
-                  StudentQuiz::create([
+                StudentQuiz::create([
                     'student_id' => $_SESSION['user'],
                     'quiz_id' => $_GET['id'],
                     'start_time' => $_POST['start_time']
                 ]);
-            } 
-
+            }
         }
 
         $quiz = Quiz::where('id', '=', $_GET['id'])->first();
@@ -197,20 +196,20 @@ class QuizController extends BaseController
         $start = ($pages - 1) * $skip;
         $rowLength = count($list_question);
         $total = $rowLength / $skip;
-        $question = Question::join('quizs','quizs.id','=','questions.quiz_id')
-        ->where('quizs.id','=',$_GET['id'])
-        ->select('questions.name as name' ,'questions.img as img ' , 'questions.id as id')
-        ->offset($start)
-        ->limit($skip)
-        ->get();
+        $question = Question::join('quizs', 'quizs.id', '=', 'questions.quiz_id')
+            ->where('quizs.id', '=', $_GET['id'])
+            ->select('questions.name as name', 'questions.img as img ', 'questions.id as id')
+            ->offset($start)
+            ->limit($skip)
+            ->get();
 
-     
+
         $answers = Answer::all();
-     
 
-        $choseAnswer = StudentQuizDetail::join('student_quiz','student_quiz_detail.student_quiz_id','=','student_quiz.id')
-        ->where('student_quiz.student_id','=', $_SESSION['user'])
-        ->get();
+
+        $choseAnswer = StudentQuizDetail::join('student_quiz', 'student_quiz_detail.student_quiz_id', '=', 'student_quiz.id')
+            ->where('student_quiz.student_id', '=', $_SESSION['user'])
+            ->get();
 
         return view(
             'user.TakeTest',
@@ -237,19 +236,18 @@ class QuizController extends BaseController
             // ->orderBy('id')
             ->first();
 
-            $check =StudentQuizDetail::join('student_quiz','student_quiz.id','=','student_quiz_detail.student_quiz_id')
-            ->where('student_quiz_detail.question_id','=',$_POST['id_question'])
-            ->where('student_quiz.student_id','=',$_SESSION['user'] )
+        $check = StudentQuizDetail::join('student_quiz', 'student_quiz.id', '=', 'student_quiz_detail.student_quiz_id')
+            ->where('student_quiz_detail.question_id', '=', $_POST['id_question'])
+            ->where('student_quiz.student_id', '=', $_SESSION['user'])
             ->first();
 
 
         if ($check == true) {
             echo "true";
 
-            $StudentQuizDetail::where('question_id',$_POST['id_question'])
-            ->where('student_quiz_id',$StudentQuiz->id)
-            ->update(['answer_id'=>$_POST['id_answer']]);
-
+            $StudentQuizDetail::where('question_id', $_POST['id_question'])
+                ->where('student_quiz_id', $StudentQuiz->id)
+                ->update(['answer_id' => $_POST['id_answer']]);
         } else {
             echo "false";
             StudentQuizDetail::create(
@@ -270,10 +268,10 @@ class QuizController extends BaseController
         $_GET['id_subject'] = $id_sub;
         $end_time = date('Y-m-d H:i:s');
 
-        $answer = StudentQuizDetail::join('student_quiz','student_quiz.id','=','student_quiz_detail.student_quiz_id')
-                                   ->where('student_quiz.student_id',$_SESSION['user'])
-                                   ->where('student_quiz.quiz_id',$quiz_id)->get();
-        
+        $answer = StudentQuizDetail::join('student_quiz', 'student_quiz.id', '=', 'student_quiz_detail.student_quiz_id')
+            ->where('student_quiz.student_id', $_SESSION['user'])
+            ->where('student_quiz.quiz_id', $quiz_id)->get();
+
         // rawQuery("SELECT *FROM student_quiz_detail as dt join  student_quiz as st 
         //  on st.id=dt.student_quiz_id WHERE st.student_id=" . $_SESSION['user'] . " AND st.quiz_id= $quiz_id ")->get();
         $score = 0;
@@ -284,12 +282,12 @@ class QuizController extends BaseController
                 $score += 1;
             }
         }
-        $model = StudentQuiz::where('quiz_id',$quiz_id)
-        ->where('student_id',$_SESSION['user'])->first();
-     
+        $model = StudentQuiz::where('quiz_id', $quiz_id)
+            ->where('student_id', $_SESSION['user'])->first();
+
         $model->update(
             [
-             
+
                 'score' => $score,
                 'end_time' => $end_time
             ]
@@ -302,23 +300,24 @@ class QuizController extends BaseController
         );
     }
 
-    
 
-    public function examResults($id_quiz, $id_sub) {
 
-   $StudentQuiz= new StudentQuiz();
-        
+    public function examResults($id_quiz, $id_sub)
+    {
+
+        $StudentQuiz = new StudentQuiz();
+
         $_GET['id_subject'] = $id_sub;
         $subject = Subject::where('id', '=', $_GET['id_subject'])->first();
 
         // $quiz_id = $id_quiz;
 
-        $StudentQuiz= StudentQuiz::join('student_quiz_detail','student_quiz_detail.student_quiz_id','=','student_quiz.id')
-        ->join('quizs','quizs.id','=','student_quiz.quiz_id')
-        ->where('student_quiz.student_id','=',$_SESSION['user'])   
-        ->where('student_quiz.quiz_id','=',$id_quiz )
-        ->select('student_quiz.score as score','student_quiz.start_time as time','student_quiz.quiz_id as quiz_id',StudentQuizDetail::raw('count(student_quiz_detail.id) as sum') )
-        ->first();
+        $StudentQuiz = StudentQuiz::join('student_quiz_detail', 'student_quiz_detail.student_quiz_id', '=', 'student_quiz.id')
+            ->join('quizs', 'quizs.id', '=', 'student_quiz.quiz_id')
+            ->where('student_quiz.student_id', '=', $_SESSION['user'])
+            ->where('student_quiz.quiz_id', '=', $id_quiz)
+            ->select('student_quiz.score as score', 'student_quiz.start_time as time', 'student_quiz.quiz_id as quiz_id', StudentQuizDetail::raw('count(student_quiz_detail.id) as sum'))
+            ->first();
         // var_dump($StudentQuiz);die;
         $user = User::where('id', '=', $_SESSION['user'])->first();
 
@@ -336,8 +335,8 @@ class QuizController extends BaseController
 
     public function detailResult($id_quiz)
     {
-  $_GET['id_quiz']=$id_quiz;
-  
+        $_GET['id_quiz'] = $id_quiz;
+
         $user = User::where('id', '=', $_SESSION['user'])->first();
 
         return view(
@@ -346,7 +345,7 @@ class QuizController extends BaseController
             [
                 // 'pages' => 'detailResult',
                 'user' => $user,
-              
+
             ]
         );
     }
@@ -354,16 +353,16 @@ class QuizController extends BaseController
 
     function dataResult()
     {
-// var_dump($id_quiz);
+        // var_dump($id_quiz);
         // $_POST['id_quiz'] = $id_quiz;
         $question = Question::where('quiz_id', '=', $_POST['id_quiz'])->get();
-        $answersDetail = StudentQuizDetail::join('student_quiz','student_quiz.id','=','student_quiz_detail.student_quiz_id')
-                                                ->where('student_quiz.student_id','=',$_SESSION['user'])
-                                                ->get();
-        
-    //     rawQuery("SELECT *FROM student_quiz as st
-    //    join student_quiz_detail as dt on st.id=dt.student_quiz_id
-    //     WHERE st.student_id=" . $_SESSION['user'] . "")->get();
+        $answersDetail = StudentQuizDetail::join('student_quiz', 'student_quiz.id', '=', 'student_quiz_detail.student_quiz_id')
+            ->where('student_quiz.student_id', '=', $_SESSION['user'])
+            ->get();
+
+        //     rawQuery("SELECT *FROM student_quiz as st
+        //    join student_quiz_detail as dt on st.id=dt.student_quiz_id
+        //     WHERE st.student_id=" . $_SESSION['user'] . "")->get();
         $msg = '';
         $i = 0;
         foreach ($question as $val) :
@@ -386,25 +385,46 @@ class QuizController extends BaseController
 
 
 
+    function SettingQuiz($id_sub,$id_quiz,$id_user){
+   $_GET['id_subject'] = $id_sub;
+   $_GET['id_quiz'] = $id_quiz;
+   $model = Quiz::where('id', "=", $id_quiz)->first();
+   $_GET['id_sub'] = $id_sub;
+//    var_dump($model);
+   return view(
+       'user.setting',
+       [
+           "model" => $model,
+
+       ]
+   );
+
+
+    }
+
+
+
     public function updateSetting($id_quiz, $id_sub)
     {
-// var_dump($id_quiz);die;
+       
+        if (empty($_POST['start_time']) || empty($_POST['end_time'])) {
+            Quiz::find($id_quiz)->update([             
+                'start_time' => $_POST['startDefault'],
+                'end_time' => $_POST['startDefault'],
+                'minutes' => $_POST['minutes'],
+                'status' => $_POST['status'],
+            ]);
+        } else {
+            Quiz::find($id_quiz)->update([
+                'start_time' => $_POST['start_time'],
+                'end_time' => $_POST['end_time'],
+                'minutes' => $_POST['minutes'],
+                'status' => $_POST['status'],
+            ]);
+        }
 
-// start_time
-// end_time
-// minutes
-// id_subject
-// Quiz::where('id',$id_sub)->update(
-//     [
-//         'start_time'=>$_POST['start_time'],
-//         'end_time'=>$_POST['end_time'],
-//         'minutes'=>$_POST['minutes'],
-//     ]
-//     );
-
-
-         Quiz::find($id_quiz)->fill($_POST)->save();
-   
-        $this->header('chu-de/chi-tiet-chu-de/chi-tiet-quiz/' .$id_quiz . '/sub/' . $id_sub);
+        // Quiz::find($id_quiz)->fill($_POST)->save();
+        
+        $this->header('chu-de/chi-tiet-chu-de/chi-tiet-quiz/' . $id_quiz . '/sub/' . $id_sub);
     }
 }
